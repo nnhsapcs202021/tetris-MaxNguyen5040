@@ -35,16 +35,55 @@ public final class Piece {
      * Defines a new piece given the Points that make up its body.
      * Makes its own copy of the array and the Points inside it.
      * Does not set up the rotations.
-     * 
+     *
      * This constructor is PRIVATE -- if a client
      * wants a piece object, they must use Piece.getPieces().
      * 
      * @param points    array of points that make up this Piece's body
      */
-    private Piece(Point[] points)
-    {
-        // TODO: implement constructor
-    }   
+    private Piece(Point[] points) {
+        this.body = points;
+
+
+        int maxX = 0;
+        int maxY = 0;
+        for(Point element : this.body) {
+            if(element.getY() > maxY){
+                maxY = (int) element.getY();
+            }
+            if(element.getX() > maxX){
+                maxX = (int) element.getX();
+            }
+        }
+
+        this.height = maxY + 1;
+        this.width = maxX + 1;
+        this.skirt = new int[width];
+
+        for(int i = width - 1; i >= 0; i--)
+        {
+            for(int j = this.body.length - 1; j >= 0; j--)
+            {
+                if((int) (this.body[j].getX()) == i)
+                {
+                    this.skirt[i] = (int) this.body[j].getY();
+                }
+            }
+        }
+
+        // Catches cases where points in body are not left to right, bottom to top (for skirt)
+        for(int i = width - 1; i >= 0; i--)
+        {
+            for(int j = this.body.length - 1; j >= 0; j--)
+            {
+                if((int) (this.body[j].getX()) == i && (int) (this.body[j].getY()) < this.skirt[i])
+                {
+                    this.skirt[i] = (int) this.body[j].getY();
+                }
+            }
+        }
+
+    }
 
     /**
      * Returns the width of the piece measured in blocks.
@@ -159,7 +198,10 @@ public final class Piece {
         String str = "";
         
         // TODO: build a string that contains all of the attributes of this Piece
-        
+        str += "Body: " + this.getBody();
+        str += "Height: " + this.getHeight();
+        str += "Width: " + this.getWidth();
+        str += "Skirt: " + this.getSkirt();
         return str;
     }
     
@@ -197,7 +239,7 @@ public final class Piece {
      * Computes all the rotations of the specified Piece and connects them by
      *      their next attributes
      *      
-     *  @param piece    the specified piece from which to compute all the
+     *  @param firstPiece    the specified piece from which to compute all the
      *                  rotations
      *  @return a reference to the specified piece
      */
@@ -218,11 +260,24 @@ public final class Piece {
             }
 
             // TODO: step 1: reflect across the line y = x
-            
+            for(int i = 0; i < rotatedPoints.length; i++){
+                int x = (int) rotatedPoints[i].getX();
+                int y = (int) rotatedPoints[i].getY();
+                rotatedPoints[i].setLocation(y,x);
+            }
             // TODO: step 2: reflect across y axis
-            
+            for(int i = 0; i < rotatedPoints.length; i++){
+                int x = (int) rotatedPoints[i].getX() * -1;
+                int y = (int) rotatedPoints[i].getY();
+                rotatedPoints[i].setLocation(x,y);
+            }
             // TODO: step 3: translate right
-            
+            for(int i = 0; i < rotatedPoints.length; i++){
+                int x = (int) rotatedPoints[i].getX() + piece.getHeight() - 1;
+                int y = (int) rotatedPoints[i].getY();
+                rotatedPoints[i].setLocation(x,y);
+            }
+
             // create the rotated piece, update next, prepare for nextIteration
             Piece rotatedPiece = new Piece(rotatedPoints);
             

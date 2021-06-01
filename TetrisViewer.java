@@ -18,14 +18,14 @@ public class TetrisViewer
     */
     public static void main(String[] args)
     {
-        JFrame frame = new JFrame("Tetris 2020");
+        JFrame frame = new JFrame("Tetris 2021");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JComponent container = (JComponent)frame.getContentPane();
         container.setLayout(new BorderLayout());
             
         final int PIXELS = 16;
-        JTetris tetris = new JTetris((JTetris.WIDTH * PIXELS) + 2,
-                (JTetris.HEIGHT + JTetris.TOP_SPACE) * (PIXELS + 2));
+        JBrainTetris tetris = new JBrainTetris((JBrainTetris.WIDTH * PIXELS) + 2,
+                (JBrainTetris.HEIGHT + JBrainTetris.TOP_SPACE) * (PIXELS + 2));
         
         
         container.add(tetris, BorderLayout.CENTER);

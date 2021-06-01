@@ -38,7 +38,7 @@ public class JTetris extends JComponent
     
     
     // when this is true, plays a fixed sequence of 100 pieces
-    protected boolean testMode = false;
+    protected boolean testMode = true;
     public final int TEST_LIMIT = 100;
     
     
